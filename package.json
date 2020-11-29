@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-webpack",
+  "name": "instagram-statistic-extension",
   "version": "0.0.1",
-  "description": "A boilerplate to chrome extension with webpack",
+  "description": "An extension for statistic in Instagram WEB",
   "scripts": {
     "build": "node utils/build.js",
     "start": "node utils/webserver.js"
@@ -10,14 +10,26 @@
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.5",
     "css-loader": "3.2.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "4.3.0",
     "fs-extra": "8.1.0",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
+    "node-sass": "^4.14.1",
+    "sass": "^1.26.8",
+    "sass-loader": "^7.1.0",
     "style-loader": "1.0.0",
     "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
-    "write-file-webpack-plugin": "4.5.1",
-    "webpack-cli": "3.3.10"
+    "write-file-webpack-plugin": "4.5.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "autoprefixer": "^9.8.2",
+    "postcss-loader": "^3.0.0",
+    "postcss-sorting": "^5.0.1",
+    "resolve-url-loader": "^3.1.1"
   }
 }

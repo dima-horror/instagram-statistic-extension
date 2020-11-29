@@ -5,7 +5,10 @@ var webpack = require("webpack"),
     CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin,
     CopyWebpackPlugin = require("copy-webpack-plugin"),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
-    WriteFilePlugin = require("write-file-webpack-plugin");
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    WriteFilePlugin = require("write-file-webpack-plugin"),
+    autoprefixer = require ('autoprefixer'),
+    postcssSorting = require ('postcss-sorting');
 
 // load the secrets
 var alias = {};
@@ -23,7 +26,9 @@ var options = {
   entry: {
     popup: path.join(__dirname, "src", "js", "popup.js"),
     options: path.join(__dirname, "src", "js", "options.js"),
-    background: path.join(__dirname, "src", "js", "background.js")
+    background: path.join(__dirname, "src", "js", "background.js"),
+    content: path.join(__dirname, "src", "js", "content.js"),
+    inject: path.join(__dirname, "src", "js", "inject.js")
   },
   output: {
     path: path.join(__dirname, "build"),
@@ -32,10 +37,41 @@ var options = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        loader: "style-loader!css-loader",
-        exclude: /node_modules/
-      },
+        test: /\.s?css$/,
+        exclude: /(node_modules)/,
+        use: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+                {
+                    loader: 'css-loader',
+                    options: {
+                        importLoaders: 3,
+                        sourceMap: true
+                    }
+                },
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                        plugins: [
+                            autoprefixer,
+                            postcssSorting,
+                            //cssMqPacker,
+                        ],
+                        sourceMap: true
+                    }
+                },
+                'resolve-url-loader',
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        outputStyle: 'compact',
+                        sourceMap: true,
+                        sourceComments: true
+                    }
+                }
+            ]
+        }),
+    },
       {
         test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
         loader: "file-loader?name=[name].[ext]",
@@ -53,7 +89,7 @@ var options = {
   },
   plugins: [
     // clean the build folder
-    new CleanWebpackPlugin(),
+    //new CleanWebpackPlugin(),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.EnvironmentPlugin(["NODE_ENV"]),
     new CopyWebpackPlugin([{
@@ -81,6 +117,9 @@ var options = {
       template: path.join(__dirname, "src", "background.html"),
       filename: "background.html",
       chunks: ["background"]
+    }),
+    new ExtractTextPlugin({
+      filename: './css/[name].min.css'
     }),
     new WriteFilePlugin()
   ]

@@ -1,5 +1,5 @@
 {
-  "name": "Chrome Extension Webpack",
+  "name": "Instagram Statistic Extension",
   "options_page": "options.html",
   "background": {
     "page": "background.html"
@@ -11,6 +11,19 @@
   "icons": {
     "128": "icon-128.png"
   },
+  "content_scripts": [{
+     "js": [ "content.bundle.js" ],
+     "matches": [ "https://*.instagram.com/*", "https://instagram.com/*"],
+     "run_at": "document_start"
+  }],
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "web_accessible_resources": [ 
+    "inject.bundle.js", 
+    "css/inject.min.css", 
+    "img/*",
+    "*.png", 
+    "*.svg", 
+    "*.ttf" 
+  ]
 }
